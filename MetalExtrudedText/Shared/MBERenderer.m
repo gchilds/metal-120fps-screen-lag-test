@@ -139,7 +139,7 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
 
     uniforms->modelViewMatrix = matrix_multiply(viewMatrix, modelMatrix);
 
-    self.rotation += timestep;
+ //   self.rotation += timestep;
 }
 
 - (void)drawInMTKView:(nonnull MTKView *)view
