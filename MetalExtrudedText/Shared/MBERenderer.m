@@ -142,8 +142,10 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
 - (void)updateWithTimestep:(NSTimeInterval)timestep
 {
     uint64_t    dt = mach_absolute_time() - _startTime;
+    uint64_t    ms = dt * _tInfo.numer / (_tInfo.denom*1000000);
+//    NSLog(@"NS %lli", ns / 1000000);
     
-    MTKMesh *textMesh = [MBETextMesh meshWithString:[NSString stringWithFormat:@"%.12li", dt * _tInfo.numer / _tInfo.denom]
+    MTKMesh *textMesh = [MBETextMesh meshWithString:[NSString stringWithFormat:@"%.8li", ms]
                                             font:_font
                                   extrusionDepth:16.0
                                 vertexDescriptor:self.vertexDescriptor
