@@ -16,6 +16,7 @@
     self.mtkView.device = device;
     self.mtkView.sampleCount = 4;
     self.mtkView.clearColor = MTLClearColorMake(0.85, 0.85, 0.85, 1.0);
+    self.mtkView.preferredFramesPerSecond = 120;
 
     self.renderer = [[MBERenderer alloc] initWithView:self.mtkView];
 
