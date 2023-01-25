@@ -3,6 +3,7 @@
 #import <ModelIO/ModelIO.h>
 
 #import "MBERenderer.h"
+#import "MBETextMesh.h"
 
 typedef struct {
     simd_float4x4 projectionMatrix;
@@ -125,6 +126,25 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
 
 - (void)updateWithTimestep:(NSTimeInterval)timestep
 {
+    MTKMeshBufferAllocator *bufferAllocator = [[MTKMeshBufferAllocator alloc] initWithDevice:self.device];
+    CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)@"HoeflerText-Black", 72, NULL);
+    
+    struct mach_timebase_info    tInfo;
+    kern_return_t   ret = mach_timebase_info(&tInfo);
+    assert(KERN_SUCCESS == ret);
+
+    uint64_t    absTime = mach_absolute_time();
+    
+    MTKMesh *textMesh = [MBETextMesh meshWithString:[NSString stringWithFormat:@"%.8li", absTime * tInfo.numer / tInfo.denom]
+                                            font:font
+                                  extrusionDepth:16.0
+                                vertexDescriptor:self.vertexDescriptor
+                                 bufferAllocator:bufferAllocator];
+    CFRelease(font);
+    
+    self.mesh = textMesh;
+
+    
     self.uniformBufferIndex = (self.uniformBufferIndex + 1) % kMaxBuffersInFlight;
     
     self.uniformBufferOffset = kAlignedUniformsSize * self.uniformBufferIndex;

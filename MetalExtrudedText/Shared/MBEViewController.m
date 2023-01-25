@@ -1,7 +1,6 @@
 
 #import "MBEViewController.h"
 #import "MBERenderer.h"
-#import "MBETextMesh.h"
 
 @implementation MBEViewController
 
@@ -23,17 +22,6 @@
     [self.renderer mtkView:self.mtkView drawableSizeWillChange:self.mtkView.bounds.size];
 
     self.mtkView.delegate = self.renderer;
-    
-    MTKMeshBufferAllocator *bufferAllocator = [[MTKMeshBufferAllocator alloc] initWithDevice:device];
-    CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)@"HoeflerText-Black", 72, NULL);
-    MTKMesh *textMesh = [MBETextMesh meshWithString:@"Hello, world!"
-                                            font:font
-                                  extrusionDepth:16.0
-                                vertexDescriptor:self.renderer.vertexDescriptor
-                                 bufferAllocator:bufferAllocator];
-    CFRelease(font);
-    
-    self.renderer.mesh = textMesh;
 }
 
 @end
