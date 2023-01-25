@@ -32,6 +32,7 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
 @property (nonatomic, assign) float rotation;
 
 @property CTFontRef font;
+@property (nonatomic) MTKMeshBufferAllocator* bufferAllocator;
 
 @end
 
@@ -127,12 +128,11 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
     }
     
     self.font = CTFontCreateWithName((__bridge CFStringRef)@"HoeflerText-Black", 72, NULL);
-
+    self.bufferAllocator = [[MTKMeshBufferAllocator alloc] initWithDevice:self.device];
 }
 
 - (void)updateWithTimestep:(NSTimeInterval)timestep
 {
-    MTKMeshBufferAllocator *bufferAllocator = [[MTKMeshBufferAllocator alloc] initWithDevice:self.device];
     
     struct mach_timebase_info    tInfo;
     kern_return_t   ret = mach_timebase_info(&tInfo);
@@ -141,10 +141,10 @@ static const size_t kAlignedUniformsSize = ((sizeof(Uniforms) + kUniformAlignmen
     uint64_t    absTime = mach_absolute_time();
     
     MTKMesh *textMesh = [MBETextMesh meshWithString:[NSString stringWithFormat:@"%.8li", absTime * tInfo.numer / tInfo.denom]
-                                            font:self.font
+                                            font:_font
                                   extrusionDepth:16.0
                                 vertexDescriptor:self.vertexDescriptor
-                                 bufferAllocator:bufferAllocator];
+                                 bufferAllocator:_bufferAllocator];
     
     self.mesh = textMesh;
 
